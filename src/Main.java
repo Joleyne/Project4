@@ -1,5 +1,13 @@
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.sun.source.util.TaskEvent;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InputMismatchException;
@@ -185,11 +193,32 @@ public class Main {
                 } else {
                     System.out.println("Please enter an actual option");
                     choice = choices(input);
+                    deserialize();
                 }
 
             }
+            serialize();
         } catch (InputMismatchException e) {
             System.out.println("Error");
+        }
+    }
+    static void serialize(){
+        Gson gson = new Gson();
+        try (FileWriter writer = new FileWriter("tasklist.json")){
+            gson.toJson(myTask,writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    static void deserialize(){
+        try (FileReader reader = new FileReader("tasklist.json")){
+            JsonParser parser = new JsonParser();
+            JsonElement jsonElement = parser.parse(reader);
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<Tasks>>(){}.getType();
+            myTask = gson.fromJson(jsonElement,type);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
