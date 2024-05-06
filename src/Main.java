@@ -188,6 +188,7 @@ public class Main {
                     upDate(input);
                     choice = choices(input);
                 } else if (choice.equals("4")) {
+                    Collections.sort(myTask);
                     list(input);
                     choice = choices(input);
                 } else {
